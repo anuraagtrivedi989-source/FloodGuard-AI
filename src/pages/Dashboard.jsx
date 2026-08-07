@@ -1,6 +1,6 @@
 import Header from "../components/Header";
 import StatCard from "../components/StatCard";
-import FloodMap from "../data/FloodMap";
+import FloodMap from "../components/FloodMap";
 
 const Dashboard = () => {
   return (

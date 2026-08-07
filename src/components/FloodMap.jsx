@@ -3,6 +3,8 @@ import L from "leaflet";
 
 import "leaflet/dist/leaflet.css";
 
+import floodLocations from "../data/floodLocations";
+
 delete L.Icon.Default.prototype._getIconUrl;
 
 L.Icon.Default.mergeOptions({
@@ -13,26 +15,7 @@ L.Icon.Default.mergeOptions({
   shadowUrl:
     "https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png",
 });
-     const floodLocations = [
-   {
-    id: 1,
-    city: "Delhi",
-    position: [28.6139, 77.209],
-    risk: "High",
-  },
-  {
-    id: 2,
-    city: "Mumbai",
-    position: [19.076, 72.8777],
-    risk: "Medium",
-  },
-  {
-    id: 3,
-    city: "Bengaluru",
-    position: [12.9716, 77.5946],
-    risk: "Low",
-  },
-]; 
+    
 
 const FloodMap = () => {
 
@@ -59,33 +42,18 @@ const FloodMap = () => {
     position={location.position}
   >
     <Popup>
-      {location.city}
-      <br />
-      Risk: {location.risk}
+     <h3 className="font-bold text-lg">
+          {location.city}
+        </h3>
+
+        <p>🌧 Rainfall: {location.rainfall} mm</p>
+        <p>🌊 Water Level: {location.waterLevel} m</p>
+        <p>⚠ Risk: {location.risk}</p>
+        <p>👥 Population: {location.population}</p>
     </Popup>
   </Marker>
 ))}
-        {/* <Marker position={[28.6139, 77.209]}>
-          <Popup>
-            🔴 Delhi <br />
-            Flood Risk: High
-          </Popup>
-        </Marker>
-
-        <Marker position={[19.076, 72.8777]}>
-          <Popup>
-            🟠 Mumbai <br />
-            Flood Risk: Medium
-          </Popup>
-        </Marker>
-
-        <Marker position={[12.9716, 77.5946]}>
-          <Popup>
-            🟢 Bengaluru <br />
-            Flood Risk: Low
-          </Popup>
-        </Marker> */}
-
+       
         
       </MapContainer>
     </div>
