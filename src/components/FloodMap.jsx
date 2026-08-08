@@ -52,9 +52,7 @@ const FloodMap = () => {
         <p>👥 Population: {location.population}</p>
     </Popup>
   </Marker>
-))}
-       
-        
+))}   
       </MapContainer>
     </div>
   );
