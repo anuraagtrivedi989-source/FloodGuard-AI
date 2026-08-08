@@ -1,7 +1,7 @@
 import Header from "../components/Header";
 import StatCard from "../components/StatCard";
 import FloodMap from "../components/FloodMap";
-
+import RiskSummary from "../components/RiskSummary";
 const Dashboard = () => {
   return (
     <div className="flex-1 p-10 bg-gray-100">
@@ -38,7 +38,7 @@ const Dashboard = () => {
         color="bg-purple-500"
         />
       </div>
-
+      <RiskSummary/>
       <FloodMap />
     </div>
   );
