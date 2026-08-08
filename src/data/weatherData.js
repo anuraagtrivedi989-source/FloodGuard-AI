@@ -5,6 +5,7 @@ const weatherData = [
     rainfall: 180,
     humidity: 86,
     windSpeed: 18,
+    waterLevel:7.1,
   },
   {
     city: "Mumbai",
@@ -12,6 +13,7 @@ const weatherData = [
     rainfall: 150,
     humidity: 91,
     windSpeed: 22,
+    waterLevel:7.5,
   },
   {
     city: "Bengaluru",
@@ -19,6 +21,7 @@ const weatherData = [
     rainfall: 60,
     humidity: 72,
     windSpeed: 12,
+    waterLevel:6.9,
   },
   {
     city: "Chennai",
@@ -26,6 +29,7 @@ const weatherData = [
     rainfall: 110,
     humidity: 82,
     windSpeed: 20,
+    waterLevel:7.3,
   },
   {
     city: "Kolkata",
@@ -33,6 +37,7 @@ const weatherData = [
     rainfall: 145,
     humidity: 88,
     windSpeed: 17,
+    waterLevel:7.4,
   },
   {
     city: "Guwahati",
@@ -40,6 +45,7 @@ const weatherData = [
     rainfall: 210,
     humidity: 94,
     windSpeed: 25,
+    waterLevel:7.7,
   },
 ];
 
