@@ -17,45 +17,133 @@ L.Icon.Default.mergeOptions({
 });
     
 
-const FloodMap = () => {
+const riskIcons = {
+  Critical: new L.Icon({
+    iconUrl:
+      "https://maps.google.com/mapfiles/ms/icons/red-dot.png",
+    iconSize: [32, 32],
+  }),
 
+  High: new L.Icon({
+    iconUrl:
+      "https://maps.google.com/mapfiles/ms/icons/orange-dot.png",
+    iconSize: [32, 32],
+  }),
+
+  Medium: new L.Icon({
+    iconUrl:
+      "https://maps.google.com/mapfiles/ms/icons/yellow-dot.png",
+    iconSize: [32, 32],
+  }),
+
+  Low: new L.Icon({
+    iconUrl:
+      "https://maps.google.com/mapfiles/ms/icons/green-dot.png",
+    iconSize: [32, 32],
+  }),
+};
+
+const FloodMap = () => {
   return (
     <div className="bg-white rounded-2xl shadow p-6 mt-8">
+
       <h2 className="text-2xl font-bold mb-4">
         🌊 Live Flood Risk Map
       </h2>
 
-      <MapContainer
-        center={[22.9734, 78.6569]}
-        zoom={5}
-        style={{ height: "500px", width: "100%" }}
-      >
-        <TileLayer
-          attribution='&copy; OpenStreetMap contributors'
-          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-        />
+      <div className="relative">
 
+        <MapContainer
+          center={[22.9734, 78.6569]}
+          zoom={5}
+          style={{
+            height: "500px",
+            width: "100%",
+          }}
+        >
 
-{floodLocations.map((location) => (
-  <Marker
-    key={location.id}
-    position={location.position}
-  >
-    <Popup>
-     <h3 className="font-bold text-lg">
-          {location.city}
-        </h3>
+          <TileLayer
+            attribution="&copy; OpenStreetMap contributors"
+            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+          />
 
-        <p>🌧 Rainfall: {location.rainfall} mm</p>
-        <p>🌊 Water Level: {location.waterLevel} m</p>
-        <p>⚠ Risk: {location.risk}</p>
-        <p>👥 Population: {location.population}</p>
-    </Popup>
-  </Marker>
-))}   
-      </MapContainer>
+          {floodLocations.map((location) => (
+            <Marker
+              key={location.id}
+              position={location.position}
+              icon={riskIcons[location.risk]}
+            >
+              <Popup>
+
+                <div className="w-52">
+
+                  <h3 className="text-lg font-bold mb-2">
+                    📍 {location.city}
+                  </h3>
+
+                  <p>
+                    🌧️ Rainfall: {location.rainfall} mm
+                  </p>
+
+                  <p>
+                    🌊 Water Level: {location.waterLevel} m
+                  </p>
+
+                  <p>
+                    👥 Population at Risk:{" "}
+                    {location.population}
+                  </p>
+
+                  <p className="font-bold mt-2">
+                    ⚠️ Risk: {location.risk}
+                  </p>
+
+                </div>
+
+              </Popup>
+            </Marker>
+          ))}
+
+        </MapContainer>
+
+        {/* Risk Legend */}
+
+        <div className="absolute bottom-5 right-5 bg-white p-4 rounded-xl shadow-lg z-50">
+
+          <h3 className="font-bold mb-2">
+            Flood Risk
+          </h3>
+
+          <div className="space-y-1">
+
+            <div className="flex items-center gap-2">
+              <span className="w-4 h-4 rounded-full bg-red-500"></span>
+              <span>Critical</span>
+            </div>
+
+            <div className="flex items-center gap-2">
+              <span className="w-4 h-4 rounded-full bg-orange-500"></span>
+              <span>High</span>
+            </div>
+
+            <div className="flex items-center gap-2">
+              <span className="w-4 h-4 rounded-full bg-yellow-400"></span>
+              <span>Medium</span>
+            </div>
+
+            <div className="flex items-center gap-2">
+              <span className="w-4 h-4 rounded-full bg-green-500"></span>
+              <span>Low</span>
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
     </div>
   );
 };
+
 
 export default FloodMap;

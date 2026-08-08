@@ -28,6 +28,33 @@ import { MapContainer, TileLayer } from "react-leaflet";
     waterLevel: 2.3,
     population: 2300,
   },
+  {
+    id: 4,
+    city: "Chennai",
+    position: [13.0827, 80.2707],
+    risk: "Medium",
+    rainfall: 110,
+    waterLevel: 4.8,
+    population: 4500,
+  },
+  {
+    id: 5,
+    city: "Kolkata",
+    position: [22.5726, 88.3639],
+    risk: "High",
+    rainfall: 145,
+    waterLevel: 6.1,
+    population: 7200,
+  },
+  {
+    id: 6,
+    city: "Guwahati",
+    position: [26.1445, 91.7362],
+    risk: "Critical",
+    rainfall: 210,
+    waterLevel: 8.1,
+    population: 9100,
+  },
 ];
 
 export default floodLocations;
