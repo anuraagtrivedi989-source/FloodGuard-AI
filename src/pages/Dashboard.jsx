@@ -2,6 +2,8 @@ import Header from "../components/Header";
 import StatCard from "../components/StatCard";
 import FloodMap from "../components/FloodMap";
 import RiskSummary from "../components/RiskSummary";
+import WeatherCard from "../components/WeatherCard";
+import weatherData from "../data/weatherData";
 const Dashboard = () => {
   return (
     <div className="flex-1 p-10 bg-gray-100">
@@ -39,6 +41,22 @@ const Dashboard = () => {
         />
       </div>
       <RiskSummary/>
+      
+      <div className="mt-8">
+  <h2 className="text-2xl font-bold mb-4">
+    🌧️ Weather Conditions
+  </h2>
+
+  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+    {weatherData.map((weather) => (
+      <WeatherCard
+        key={weather.city}
+        weather={weather}
+      />
+    ))}
+  </div>
+</div>
+
       <FloodMap />
     </div>
   );
