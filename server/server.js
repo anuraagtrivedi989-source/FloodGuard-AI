@@ -1,6 +1,7 @@
 const express = require("express");
 const cors = require("cors");
 const floodLocations = require("./data/floodLocations");
+const shelters = require("./data/shelters");
 
 const app = express();
 
@@ -25,6 +26,11 @@ app.get("/api/health", (req, res) => {
 app.get("/api/flood-locations", (req, res) => {
   res.json(floodLocations);
 });
+
+app.get("/api/shelters", (req, res) => {
+  res.json(shelters);
+});
+
 
 app.listen(PORT, () => {
   console.log(`FloodGuard AI server running on port ${PORT}`);

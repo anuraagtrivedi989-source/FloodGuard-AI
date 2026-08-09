@@ -11,3 +11,15 @@ export const getFloodLocations = async () => {
 
   return response.json();
 };
+
+export const getShelters = async () => {
+  const response = await fetch(
+    `${API_BASE_URL}/api/shelters`
+  );
+
+  if (!response.ok) {
+    throw new Error("Failed to fetch shelters");
+  }
+
+  return response.json();
+};

@@ -1,10 +1,44 @@
+import { useEffect, useState } from "react";
+
 import Header from "../components/Header";
+
 import StatCard from "../components/StatCard";
+
 import FloodMap from "../components/FloodMap";
+
 import RiskSummary from "../components/RiskSummary";
+
 import WeatherCard from "../components/WeatherCard";
+
 import weatherData from "../data/weatherData";
+
+import ShelterCard from "../components/ShelterCard";
+
+import { getShelters } from "../services/api";
+
 const Dashboard = () => {
+const [shelters, setShelters] = useState([]);
+const [sheltersLoading, setSheltersLoading] = useState(true);
+const [sheltersError, setSheltersError] = useState("");
+
+useEffect(() => {
+  const fetchShelters = async () => {
+    try {
+      const data = await getShelters();
+
+      setShelters(data);
+    } catch (error) {
+      console.error(error);
+      setSheltersError("Unable to load shelters");
+    } finally {
+      setSheltersLoading(false);
+    }
+  };
+
+  fetchShelters();
+}, []);
+
+
   return (
     <div className="flex-1 p-10 bg-gray-100">
       <Header />
@@ -55,8 +89,34 @@ const Dashboard = () => {
       />
     ))}
   </div>
+  
 </div>
+      <div className="mt-8">
+  <h2 className="text-2xl font-bold mb-4">
+    🏠 Emergency Shelters
+  </h2>
 
+  {sheltersLoading && (
+    <p>Loading shelters...</p>
+  )}
+
+  {sheltersError && (
+    <p className="text-red-600">
+      {sheltersError}
+    </p>
+  )}
+
+  {!sheltersLoading && !sheltersError && (
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      {shelters.map((shelter) => (
+        <ShelterCard
+          key={shelter.id}
+          shelter={shelter}
+        />
+      ))}
+    </div>
+  )}
+</div>
       <FloodMap />
     </div>
   );
