@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getFloodLocations } from "../services/api";
+import { getFloodLocations, getShelters, } from "../services/api";
 
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import L from "leaflet";
@@ -21,7 +21,7 @@ L.Icon.Default.mergeOptions({
   shadowUrl:
     "https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png",
 });
-    
+
 
 const riskIcons = {
   Critical: new L.Icon({
@@ -49,51 +49,61 @@ const riskIcons = {
   }),
 };
 
+const shelterIcon = new L.Icon({
+  iconUrl:
+    "https://maps.google.com/mapfiles/ms/icons/blue-dot.png",
+  iconSize: [32, 32],
+});
+
 const FloodMap = () => {
   const [floodLocations, setFloodLocations] = useState([]);
-const [loading, setLoading] = useState(true);
-const [error, setError] = useState("");
+  const [shelters, setShelters] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
-useEffect(() => {
-  const fetchFloodLocations = async () => {
-    try {
-       const data = await getFloodLocations();
+  useEffect(() => {
+    const fetchFloodLocations = async () => {
+      try {
+        const data = await getFloodLocations();
+        setFloodLocations(data);
 
-      setFloodLocations(data);
-    } catch (err) {
-      setError("Unable to load flood locations");
-      console.error(err);
-    } finally {
-      setLoading(false);
-    }
-  };
+        const shelterData = await getShelters();
 
-  fetchFloodLocations();
-}, []);
+        setShelters(shelterData);
+      } catch (err) {
+        setError("Unable to load flood locations");
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-if (loading) {
-  return (
-    <div className="bg-white rounded-2xl shadow p-6 mt-8">
-      <h2 className="text-2xl font-bold mb-4">
-        🌊 Live Flood Risk Map
-      </h2>
+    fetchFloodLocations();
+  }, []);
 
-      <p>Loading flood locations...</p>
-    </div>
-  );
-}
+  if (loading) {
+    return (
+      <div className="bg-white rounded-2xl shadow p-6 mt-8">
+        <h2 className="text-2xl font-bold mb-4">
+          🌊 Live Flood Risk Map
+        </h2>
 
-if (error) {
-  return (
-    <div className="bg-white rounded-2xl shadow p-6 mt-8">
-      <h2 className="text-2xl font-bold mb-4">
-        🌊 Live Flood Risk Map
-      </h2>
+        <p>Loading flood locations...</p>
+      </div>
+    );
+  }
 
-      <p className="text-red-600">{error}</p>
-    </div>
-  );
-}
+  if (error) {
+    return (
+      <div className="bg-white rounded-2xl shadow p-6 mt-8">
+        <h2 className="text-2xl font-bold mb-4">
+          🌊 Live Flood Risk Map
+        </h2>
+
+        <p className="text-red-600">{error}</p>
+      </div>
+    );
+  }
   return (
     <div className="bg-white rounded-2xl shadow p-6 mt-8">
 
@@ -150,6 +160,48 @@ if (error) {
 
                 </div>
 
+              </Popup>
+            </Marker>
+          ))}
+
+          {shelters.map((shelter) => (
+            <Marker
+              key={`shelter-${shelter.id}`}
+              position={[
+                shelter.latitude,
+                shelter.longitude,
+              ]}
+              icon={shelterIcon}
+            >
+              <Popup>
+                <div className="w-52">
+
+                  <h3 className="text-lg font-bold mb-2">
+                    🏠 {shelter.name}
+                  </h3>
+
+                  <p>
+                    📍 {shelter.city}
+                  </p>
+
+                  <p>
+                    👥 Capacity: {shelter.capacity}
+                  </p>
+
+                  <p>
+                    🧑‍🤝‍🧑 Occupied: {shelter.occupied}
+                  </p>
+
+                  <p>
+                    🟢 Available:{" "}
+                    {shelter.capacity - shelter.occupied}
+                  </p>
+
+                  <p className="font-bold mt-2">
+                    Status: {shelter.status}
+                  </p>
+
+                </div>
               </Popup>
             </Marker>
           ))}
