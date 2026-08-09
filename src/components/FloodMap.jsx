@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { getFloodLocations } from "../services/api";
 
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import L from "leaflet";
@@ -56,15 +57,7 @@ const [error, setError] = useState("");
 useEffect(() => {
   const fetchFloodLocations = async () => {
     try {
-      const response = await fetch(
-        "http://localhost:5000/api/flood-locations"
-      );
-
-      if (!response.ok) {
-        throw new Error("Failed to fetch flood locations");
-      }
-
-      const data = await response.json();
+       const data = await getFloodLocations();
 
       setFloodLocations(data);
     } catch (err) {

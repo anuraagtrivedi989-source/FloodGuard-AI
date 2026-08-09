@@ -1,0 +1,13 @@
+const API_BASE_URL = "http://localhost:5000";
+
+export const getFloodLocations = async () => {
+  const response = await fetch(
+    `${API_BASE_URL}/api/flood-locations`
+  );
+
+  if (!response.ok) {
+    throw new Error("Failed to fetch flood locations");
+  }
+
+  return response.json();
+};
