@@ -1,9 +1,14 @@
+import { useEffect, useState } from "react";
+
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import L from "leaflet";
 
 import "leaflet/dist/leaflet.css";
 
-import floodLocations from "../data/floodLocations";
+// import floodLocations from "../data/floodLocations";
+
+
+
 
 delete L.Icon.Default.prototype._getIconUrl;
 
@@ -44,6 +49,58 @@ const riskIcons = {
 };
 
 const FloodMap = () => {
+  const [floodLocations, setFloodLocations] = useState([]);
+const [loading, setLoading] = useState(true);
+const [error, setError] = useState("");
+
+useEffect(() => {
+  const fetchFloodLocations = async () => {
+    try {
+      const response = await fetch(
+        "http://localhost:5000/api/flood-locations"
+      );
+
+      if (!response.ok) {
+        throw new Error("Failed to fetch flood locations");
+      }
+
+      const data = await response.json();
+
+      setFloodLocations(data);
+    } catch (err) {
+      setError("Unable to load flood locations");
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  fetchFloodLocations();
+}, []);
+
+if (loading) {
+  return (
+    <div className="bg-white rounded-2xl shadow p-6 mt-8">
+      <h2 className="text-2xl font-bold mb-4">
+        🌊 Live Flood Risk Map
+      </h2>
+
+      <p>Loading flood locations...</p>
+    </div>
+  );
+}
+
+if (error) {
+  return (
+    <div className="bg-white rounded-2xl shadow p-6 mt-8">
+      <h2 className="text-2xl font-bold mb-4">
+        🌊 Live Flood Risk Map
+      </h2>
+
+      <p className="text-red-600">{error}</p>
+    </div>
+  );
+}
   return (
     <div className="bg-white rounded-2xl shadow p-6 mt-8">
 
@@ -70,7 +127,7 @@ const FloodMap = () => {
           {floodLocations.map((location) => (
             <Marker
               key={location.id}
-              position={location.position}
+              position={[location.latitude, location.longitude]}
               icon={riskIcons[location.risk]}
             >
               <Popup>
