@@ -1,7 +1,8 @@
 const express = require("express");
 const cors = require("cors");
-const floodLocations = require("./data/floodLocations");
+
 const shelters = require("./data/shelters");
+const db = require("./db");
 
 const app = express();
 
@@ -23,14 +24,34 @@ app.get("/api/health", (req, res) => {
   });
 });
 
-app.get("/api/flood-locations", (req, res) => {
-  res.json(floodLocations);
+app.get("/api/flood-locations", async (req, res) => {
+  try {
+    const [rows] = await db.query(
+      "SELECT * FROM flood_locations"
+    );
+
+    res.json(rows);
+  } catch (error) {
+    console.error("Error fetching flood locations:", error);
+
+    res.status(500).json({
+      error: "Failed to fetch flood locations",
+    });
+  }
 });
 
 app.get("/api/shelters", (req, res) => {
   res.json(shelters);
 });
 
+
+db.query("SELECT 1")
+  .then(() => {
+    console.log("MySQL connected successfully!");
+  })
+  .catch((error) => {
+    console.error("MySQL connection failed:", error.message);
+  });
 
 app.listen(PORT, () => {
   console.log(`FloodGuard AI server running on port ${PORT}`);
