@@ -55,6 +55,22 @@ app.get("/api/shelters", async (req, res) => {
   }
 });
 
+app.get("/api/weather", async (req, res) => {
+  try {
+    const [rows] = await db.query(
+      "SELECT * FROM weather_data ORDER BY recorded_at DESC"
+    );
+
+    res.json(rows);
+  } catch (error) {
+    console.error("Error fetching weather:", error);
+
+    res.status(500).json({
+      error: "Failed to fetch weather data",
+    });
+  }
+});
+
 db.query("SELECT 1")
   .then(() => {
     console.log("MySQL connected successfully!");

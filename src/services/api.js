@@ -23,3 +23,15 @@ export const getShelters = async () => {
 
   return response.json();
 };
+
+export const getWeather = async () => {
+  const response = await fetch(
+    `${API_BASE_URL}/api/weather`
+  );
+
+  if (!response.ok) {
+    throw new Error("Failed to fetch weather data");
+  }
+
+  return response.json();
+};
