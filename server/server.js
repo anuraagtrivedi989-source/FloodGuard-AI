@@ -1,7 +1,6 @@
 const express = require("express");
 const cors = require("cors");
 
-const shelters = require("./data/shelters");
 const db = require("./db");
 
 const app = express();
@@ -40,10 +39,21 @@ app.get("/api/flood-locations", async (req, res) => {
   }
 });
 
-app.get("/api/shelters", (req, res) => {
-  res.json(shelters);
-});
+app.get("/api/shelters", async (req, res) => {
+  try {
+    const [rows] = await db.query(
+      "SELECT * FROM shelters"
+    );
 
+    res.json(rows);
+  } catch (error) {
+    console.error("Error fetching shelters:", error);
+
+    res.status(500).json({
+      error: "Failed to fetch shelters",
+    });
+  }
+});
 
 db.query("SELECT 1")
   .then(() => {
