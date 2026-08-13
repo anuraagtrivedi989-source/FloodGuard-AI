@@ -2,6 +2,7 @@ const express = require("express");
 const cors = require("cors");
 
 const db = require("./db");
+const axios = require("axios");
 
 const app = express();
 
@@ -67,6 +68,32 @@ app.get("/api/weather", async (req, res) => {
 
     res.status(500).json({
       error: "Failed to fetch weather data",
+    });
+  }
+});
+
+app.post("/api/predict", async (req, res) => {
+  try {
+    const { rainfall, water_level, humidity } = req.body;
+
+    const response = await axios.post(
+      "http://localhost:5001/predict",
+      {
+        rainfall,
+        water_level,
+        humidity,
+      }
+    );
+
+    res.json(response.data);
+  } catch (error) {
+    console.error(
+      "Error connecting to ML service:",
+      error.message
+    );
+
+    res.status(500).json({
+      error: "Unable to get flood prediction",
     });
   }
 });
