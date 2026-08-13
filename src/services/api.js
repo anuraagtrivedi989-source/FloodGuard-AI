@@ -35,3 +35,30 @@ export const getWeather = async () => {
 
   return response.json();
 };
+
+export const predictFloodRisk = async ({
+  rainfall,
+  water_level,
+  humidity,
+}) => {
+  const response = await fetch(
+    `${API_BASE_URL}/api/predict`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        rainfall,
+        water_level,
+        humidity,
+      }),
+    }
+  );
+
+  if (!response.ok) {
+    throw new Error("Failed to predict flood risk");
+  }
+
+  return response.json();
+};
