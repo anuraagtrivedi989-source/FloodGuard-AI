@@ -14,7 +14,7 @@ import weatherData from "../data/weatherData";
 
 import ShelterCard from "../components/ShelterCard";
 
-import { getShelters, getWeather, predictFloodRisk, } from "../services/api";
+import { getAvailableShelters, getShelters, getWeather, predictFloodRisk, } from "../services/api";
 
 const Dashboard = () => {
 
@@ -29,6 +29,8 @@ const Dashboard = () => {
   const [prediction, setPrediction] = useState(null);
   const [predictionLoading, setPredictionLoading] = useState(false);
   const [predictionError, setPredictionError] = useState("");
+
+  const [selectedCity, setSelectedCity] = useState("Delhi");
 
   useEffect(() => {
     const fetchShelters = async () => {
@@ -70,10 +72,18 @@ const Dashboard = () => {
     setPredictionError("");
 
     try {
+      const selectedWeather = weather.find(
+        (item) => item.city === selectedCity
+      );
+
+      if (!selectedWeather) {
+        throw new Error("Weather data not found");
+      }
+
       const result = await predictFloodRisk({
-        rainfall: 190,
-        water_level: 7,
-        humidity: 88,
+        rainfall: Number(selectedWeather.rainfall),
+        water_level: Number(selectedWeather.river_level),
+        humidity: Number(selectedWeather.humidity),
       });
 
       setPrediction(result);
@@ -203,6 +213,25 @@ const Dashboard = () => {
           🤖 AI Flood Prediction
         </h2>
 
+        <label className="block mb-2 font-semibold">
+          Select Location
+        </label>
+
+        <select
+          value={selectedCity}
+          onChange={(e) => {
+            setSelectedCity(e.target.value);
+            setPrediction(null);
+          }}
+          className="w-full border rounded-lg px-4 py-3 mb-4"
+        >
+          {weather.map((item) => (
+            <option key={item.id} value={item.city}>
+              {item.city}
+            </option>
+          ))}
+        </select>
+
         <button
           onClick={handlePrediction}
           disabled={predictionLoading}
@@ -234,6 +263,7 @@ const Dashboard = () => {
           </div>
         )}
       </div>
+      
       <FloodMap />
     </div>
   );

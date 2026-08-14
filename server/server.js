@@ -56,6 +56,35 @@ app.get("/api/shelters", async (req, res) => {
   }
 });
 
+app.get("/api/shelters/available", async (req, res) => {
+  try {
+    const [rows] = await db.query(`
+      SELECT
+        id,
+        name,
+        city,
+        latitude,
+        longitude,
+        capacity,
+        occupied,
+        (capacity - occupied) AS available_capacity,
+        status
+      FROM shelters
+      WHERE status = 'Open'
+        AND occupied < capacity
+      ORDER BY available_capacity DESC
+    `);
+
+    res.json(rows);
+  } catch (error) {
+    console.error("Error fetching available shelters:", error);
+
+    res.status(500).json({
+      error: "Failed to fetch available shelters",
+    });
+  }
+});
+
 app.get("/api/weather", async (req, res) => {
   try {
     const [rows] = await db.query(
@@ -106,6 +135,6 @@ db.query("SELECT 1")
     console.error("MySQL connection failed:", error.message);
   });
 
-app.listen(PORT, () => {
+app.listen(PORT,"0.0.0.0", () => {
   console.log(`FloodGuard AI server running on port ${PORT}`);
 });

@@ -1,9 +1,32 @@
+import { useEffect, useState } from "react";
+
+import { getAvailableShelters } from "../services/api";
+
+
 const ShelterCard = ({ shelter }) => {
   const available = shelter.capacity - shelter.occupied;
 
   const occupancyPercentage = Math.round(
     (shelter.occupied / shelter.capacity) * 100
   );
+
+const [availableShelters, setAvailableShelters] = useState([]);
+const [shelterLoading, setShelterLoading] = useState(true);
+
+// useEffect(() => {
+//   const loadShelters = async () => {
+//     try {
+//       const data = await getAvailableShelters();
+//       setAvailableShelters(data);
+//     } catch (error) {
+//       console.error("Failed to load available shelters:", error);
+//     } finally {
+//       setShelterLoading(false);
+//     }
+//   };
+
+//   loadShelters();
+// }, []);
 
   return (
     <div className="bg-white rounded-xl shadow p-5">
@@ -66,6 +89,7 @@ const ShelterCard = ({ shelter }) => {
           <p className="font-bold">
             {available}
           </p>
+
         </div>
 
       </div>

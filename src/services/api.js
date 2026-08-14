@@ -62,3 +62,15 @@ export const predictFloodRisk = async ({
 
   return response.json();
 };
+
+export const getAvailableShelters = async () => {
+  const response = await fetch(
+    `${API_BASE_URL}/api/shelters/available`
+  );
+
+  if (!response.ok) {
+    throw new Error("Failed to fetch available shelters");
+  }
+
+  return response.json();
+};
