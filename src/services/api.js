@@ -74,3 +74,54 @@ export const getAvailableShelters = async () => {
 
   return response.json();
 };
+
+export const recommendShelter = async (city) => {
+  const response = await fetch(
+    `${API_BASE_URL}/api/shelters/recommend?city=${encodeURIComponent(city)}`
+  );
+
+  if (!response.ok) {
+    throw new Error("No available shelter found");
+  }
+
+  const data = await response.json();
+
+  return data.recommended_shelter;
+};
+
+export const submitFloodReport = async (reportData) => {
+  const formData = new FormData();
+
+  formData.append(
+    "description",
+    reportData.description || ""
+  );
+
+  formData.append(
+    "latitude",
+    reportData.latitude
+  );
+
+  formData.append(
+    "longitude",
+    reportData.longitude
+  );
+
+  if (reportData.photo) {
+    formData.append("photo", reportData.photo);
+  }
+
+  const response = await fetch(
+    "http://127.0.0.1:5000/api/flood-reports",
+    {
+      method: "POST",
+      body: formData,
+    }
+  );
+
+  if (!response.ok) {
+    throw new Error("Failed to submit flood report");
+  }
+
+  return response.json();
+};

@@ -55,7 +55,31 @@ const shelterIcon = new L.Icon({
   iconSize: [32, 32],
 });
 
-const FloodMap = () => {
+const recommendedShelterIcon = L.divIcon({
+  className: "recommended-shelter-marker",
+  html: `
+    <div style="
+      width: 38px;
+      height: 38px;
+      background: purple;
+      border: 4px solid white;
+      border-radius: 50%;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 20px;
+      font-weight: bold;
+    ">
+      ★
+    </div>
+  `,
+  iconSize: [38, 38],
+  iconAnchor: [19, 19],
+});
+
+const FloodMap = ({ recommendedShelter }) => {
   const [floodLocations, setFloodLocations] = useState([]);
   const [shelters, setShelters] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -205,6 +229,61 @@ const FloodMap = () => {
               </Popup>
             </Marker>
           ))}
+
+          {recommendedShelter && (
+            <Marker
+              position={[
+                Number(recommendedShelter.latitude),
+                Number(recommendedShelter.longitude),
+              ]}
+              icon={recommendedShelterIcon}
+            >
+              <Popup>
+                <div className="w-56">
+                  <h3 className="text-lg font-bold mb-2">
+                    🚨 Recommended Shelter
+                  </h3>
+
+                  <p className="font-semibold">
+                    🏠 {recommendedShelter.name}
+                  </p>
+
+                  <p>
+                    📍 {recommendedShelter.city}
+                  </p>
+
+                  <p>
+                    📏 Distance:{" "}
+                    {recommendedShelter.distance_km} km
+                  </p>
+
+                  <p>
+                    👥 Available:{" "}
+                    {recommendedShelter.available_capacity}
+                  </p>
+
+                  <p>
+                    🟢 Status:{" "}
+                    {recommendedShelter.status}
+                  </p>
+
+                  <p className="font-bold mt-2">
+                    ⚠️ Risk:{" "}
+                    {recommendedShelter.risk_level}
+                  </p>
+
+                  <a
+                    href={`https://www.google.com/maps/dir/?api=1&destination=${recommendedShelter.latitude},${recommendedShelter.longitude}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="block mt-3 text-center bg-blue-600 text-white px-3 py-2 rounded-lg font-semibold"
+                  >
+                    🧭 Get Directions
+                  </a>
+                </div>
+              </Popup>
+            </Marker>
+          )}
 
         </MapContainer>
 

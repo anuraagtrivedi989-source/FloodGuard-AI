@@ -10,23 +10,6 @@ const ShelterCard = ({ shelter }) => {
     (shelter.occupied / shelter.capacity) * 100
   );
 
-const [availableShelters, setAvailableShelters] = useState([]);
-const [shelterLoading, setShelterLoading] = useState(true);
-
-// useEffect(() => {
-//   const loadShelters = async () => {
-//     try {
-//       const data = await getAvailableShelters();
-//       setAvailableShelters(data);
-//     } catch (error) {
-//       console.error("Failed to load available shelters:", error);
-//     } finally {
-//       setShelterLoading(false);
-//     }
-//   };
-
-//   loadShelters();
-// }, []);
 
   return (
     <div className="bg-white rounded-xl shadow p-5">
